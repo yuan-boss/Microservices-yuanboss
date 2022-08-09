@@ -72,6 +72,7 @@ public class HotelService extends ServiceImpl<HotelMapper, Hotel> implements IHo
 
 
 
+
     }
 
     private void buildBasicQuery(RequestParams params, SearchRequest request) {
