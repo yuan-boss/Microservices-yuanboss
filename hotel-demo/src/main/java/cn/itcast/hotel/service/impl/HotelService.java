@@ -49,6 +49,12 @@ public class HotelService extends ServiceImpl<HotelMapper, Hotel> implements IHo
 
             buildBasicQuery(params, request);
 
+            //2.2高亮处理
+            //注意：如果高亮处理多个字段，最后一个字段的样式处理会覆盖前面的字段样式
+            request.source().highlighter(new HighlightBuilder()
+                    .field("name").requireFieldMatch(false).preTags("<em>").postTags("</em")
+            );
+
             //2.2分页
             int page = params.getPage();
             int size = params.getSize();
@@ -145,6 +151,19 @@ public class HotelService extends ServiceImpl<HotelMapper, Hotel> implements IHo
                 Object sortValue = sortValues[0];
                 hotelDoc.setDistance(sortValue);
             }
+            Map<String, HighlightField> highlightFields = hit.getHighlightFields();
+            if (!CollectionUtils.isEmpty(highlightFields)){
+                //根据字段名获取高亮结果
+                HighlightField highlightField = highlightFields.get("name");
+                if (highlightField != null){
+                    //获取高亮值
+                    String name = highlightField.getFragments()[0].string();
+                    //覆盖非高亮结果
+                    hotelDoc.setName(name);
+                }
+
+            }
+
             hotels.add(hotelDoc);
         }
         return new PageResult(total,hotels);

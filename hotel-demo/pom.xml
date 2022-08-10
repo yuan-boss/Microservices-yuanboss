@@ -18,6 +18,10 @@
         <elasticsearch.version>7.17.5</elasticsearch.version>
     </properties>
     <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+        </dependency>
 <!--        elasticsearch-->
         <dependency>
             <groupId>org.elasticsearch.client</groupId>
